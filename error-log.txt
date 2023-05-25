@@ -1,0 +1,2 @@
+https://www.food52.com: Request failed with status code 403
+https://www.society6.com: Request failed with status code 403

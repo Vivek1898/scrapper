@@ -1,0 +1,62 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OG Data Scraper</title>
+  <style>
+    body {
+      background-color: cadetblue;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>OG Data Scraper</h1>
+  <form id="urlForm">
+    <input type="text" id="urlInput" placeholder="Enter URLs separated by commas">
+    <button type="submit">Scrape</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('urlForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var urls = document.getElementById('urlInput').value;
+      scrapeData(urls);
+    });
+
+    function scrapeData(urls) {
+      fetch('/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ urls: urls })
+      })
+      .then(response => response.json())
+      .then(data => {
+        var resultHTML = '';
+        for (let i = 0; i < data.length; i++) {
+            const item = data[i];
+            resultHTML += `
+              <div>
+                <h3>Result ${i + 1}:</h3>
+                <p>Title: ${item.ogTitle}</p>
+                <p>Title: ${item.title}</p>
+                <p>Image: ${item.ogImage}</p>
+                <p>Description: ${item.description}</p>
+              </div>
+              <hr>
+            `;
+          }
+        document.getElementById('result').innerHTML = resultHTML;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>
